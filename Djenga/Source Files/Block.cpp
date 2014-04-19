@@ -20,7 +20,7 @@
 #include <stdio.h>
 
 
-
+// these should be documented and static members of a class (e.g., in Block)
  const double cellWidth = 1.0;
  const double cellHeight = 1.0;
  const double cellDepth = 1.0;
@@ -37,7 +37,6 @@
 
   const double VirtualKs = 4000;
   const double VirtualKd = 10;
-
   void drawCube(double x, double y, double z);
 
   vec3 globalCenter = vec3();
@@ -45,7 +44,7 @@
 
  Block::Block():
  m_integrationType(Block::RK4),m_width(0.0),m_height(0.0),m_depth(0.0)
- {
+ {// why the following?
    ;
 
  }
@@ -237,6 +236,7 @@ void drawCube(double x, double y, double z)
 		double half_depth = 0.5*globalDepth;
 
 		glBegin(GL_QUADS);
+		// can this code made less repetetive?
 			glColor3f(1.0f, 1.0f, 0.0f);
 			glVertex3f(x-half_width, y-half_height, z-half_depth);
 			glVertex3f(x+half_width, y-half_height, z-half_depth);
@@ -305,6 +305,7 @@ void Block::Update(double dt, const Scene& scene, const vec3& externalForces)
 
 }
 
+// the scene seems to be unused
 void Block::CheckForCollisions(BlockGrid& grid, const Scene& scene)
 {
    m_vcontacts.clear();
@@ -341,7 +342,7 @@ void Block::CheckForCollisions(BlockGrid& grid, const Scene& scene)
       
 
 }
-
+// similarly, shouldn't this be const?
 bool Block::FloorIntersection(Particle& p, Intersection& intersection)
 {
   if(p.position[1]<0)
@@ -632,6 +633,7 @@ Block::Particle Block::Particle::EMPTY;
  
 Block::Particle::Particle(int idx, const vec3& p, const vec3& v, const vec3& f, const vec3& userf, double m)
 {
+	// normally these should be done in initializers instead of in the body of the constructor
 //	printf("Hello");
     index = idx;
     position = p;

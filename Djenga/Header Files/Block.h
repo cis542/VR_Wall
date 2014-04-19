@@ -1,3 +1,4 @@
+// vrwall is not a person (as far as I know)
 /*
  * Block.h
  *
@@ -37,32 +38,40 @@ class Block
                         );
 
 
-     virtual void Draw(vec3 center);
+	 // Again, it is better to put graphiucs functionality of a Block into a separate (possibly friend) class.
+	 // This will decouple the physical simulation of the Block from the graphical display of the block. 
+	 virtual void Draw(vec3 center);
 
      //virtual void DrawCube(double x, double y, double z);
-
+	 // why do you reset blocks instead of destroying them and creating new ones?
      virtual void Reset();
-
+	 // why is this a property of a block?
      enum IntegrationType {EULER, MIDPOINT, RK4};
      virtual void SetIntegrationType(IntegrationType type);
      virtual IntegrationType GetIntegrationType() const;
 
+	 // Blocks should not take a dependence on mouse gestures.
      virtual int onMouseCheck(vec3 point);
 
      virtual void dragBlock(vec3 start, vec3 end, int index);
 
-     virtual void clearUserForces();
+	 // I don't really understand what you are doing, but I assume that you are accumulating forces on the block
+	 // in the computational step of moving time forward. This is stylistically questionable, because you are storing
+	 // what amounts to the state of an algorithm in the object, even though it doesn't have anything to do with the 
+	 // state of the object. It is generally preferable to make an instance of the algorithm into a separate object 
+	 // (perhaps of a friend class).
+	 virtual void clearUserForces();
 
-
-
-     virtual void InitBlock(vec3 position, double width, double height, double depth);
+	 // why is initialization not in the constructor?
+     // why is position conflated with shape?
+	 virtual void InitBlock(vec3 position, double width, double height, double depth);
 
      double m_width, m_height, m_depth;
 
      vec3 m_center;
-
+	 // the forces on a block should not be part of the state of a block
      vec3 m_externalForces;
-
+	 // why do you need this?
      vec3 m_initialPosition;
 
      //int GetIndex(int i, int j, int k) const;
@@ -88,8 +97,10 @@ class Block
      class Intersection;
      class Particle;
 
-     //typedef std::vector<std::vector<std::vector<Particle> > > BlockGrid;
+	 // Clocks should not take a dependence on the BlockAGrid data structure
 
+     //typedef std::vector<std::vector<std::vector<Particle> > > BlockGrid;
+	 // prefer using to typedef
      typedef std::vector<Particle> BlockGrid;
 
      Particle& GetParticle(BlockGrid& grid, int index);
@@ -146,12 +157,16 @@ class Block
      };
 
      public:
+		 // why is this public? or perhaps more pointedly, if you want to subclass blocks, why isn't this 
+		 // exposed through a virtual function?
      BlockGrid m_vparticles;
 
      IntegrationType m_integrationType;
      std::vector<Intersection>m_vcontacts;
      std::vector<Intersection>m_vcollisions;
-
+	 // I assume that this doesn't take a block as an argument because you want to subclass blocks to yield
+	 // different particle grids. But then why take a blockgrid instead of just a particle?
+	 // Why should a block take a dependence on the scene data structure?
      virtual void CheckForCollisions(BlockGrid& grid, const Scene& scene);
 
 
