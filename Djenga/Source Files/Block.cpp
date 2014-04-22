@@ -21,11 +21,20 @@
 
 #define PI 3.1459
 
+<<<<<<< HEAD
  const double cellWidth = 0.1;
  const double cellHeight = 0.1;
  const double cellDepth = 0.1;
 
  const float Threshold = 0.1;
+=======
+// these should be documented and static members of a class (e.g., in Block)
+ const double cellWidth = 1.0;
+ const double cellHeight = 1.0;
+ const double cellDepth = 1.0;
+
+ const float Threshold = 0.15;
+>>>>>>> 94709aac079139977d61a7899f4e29fac8894fe6
 
  double globalWidth;
  double globalHeight;
@@ -37,6 +46,7 @@
    int heightNumber;
    int depthNumber;
 
+<<<<<<< HEAD
   const double VirtualKs = 1000;
   const double VirtualKd = 20;
   const double g_structuralKs=6000;
@@ -45,13 +55,23 @@
   //void drawCube(double x, double y, double z);
 
   void SetGridSize(int cols, int rows, int stacks);
+=======
+  const double VirtualKs = 4000;
+  const double VirtualKd = 10;
+  void drawCube(double x, double y, double z);
+>>>>>>> 94709aac079139977d61a7899f4e29fac8894fe6
 
   vec3 globalCenter = vec3();
 
 
  Block::Block():
+<<<<<<< HEAD
  m_integrationType(Block::RK4),m_width(0.0),m_height(0.0),m_depth(0.0),m_radius(0.0),m_index(-1)
  {
+=======
+ m_integrationType(Block::RK4),m_width(0.0),m_height(0.0),m_depth(0.0)
+ {// why the following?
+>>>>>>> 94709aac079139977d61a7899f4e29fac8894fe6
    ;
 
  }
@@ -421,6 +441,7 @@ void Block::drawCube(double x, double y, double z)
                  
                 /*
 		glBegin(GL_QUADS);
+<<<<<<< HEAD
 			//glColor3f(1.0f, 1.0f, 0.0f);
 			glTexCoord2d(0,0);glVertex3f(x-half_width, y-half_height, z-half_depth);
 			glTexCoord2d(0,1);glVertex3f(x+half_width, y-half_height, z-half_depth);
@@ -457,6 +478,45 @@ void Block::drawCube(double x, double y, double z)
 			glTexCoord2d(0,1);glVertex3f(x+half_width, y-half_height, z-half_depth);
 			glTexCoord2d(1,1);glVertex3f(x+half_width, y-half_height, z+half_depth);
 			glTexCoord2d(1,0);glVertex3f(x+half_width, y+half_height, z+half_depth);
+=======
+		// can this code made less repetetive?
+			glColor3f(1.0f, 1.0f, 0.0f);
+			glVertex3f(x-half_width, y-half_height, z-half_depth);
+			glVertex3f(x+half_width, y-half_height, z-half_depth);
+			glVertex3f(x+half_width, y+half_height, z-half_depth);
+			glVertex3f(x-half_width, y+half_height, z-half_depth);
+
+
+			glColor3f(1.0f, 1.0f, 0.0f);
+			glVertex3f(x+half_width, y+half_height, z-half_depth);
+			glVertex3f(x-half_width, y+half_height, z-half_depth);
+			glVertex3f(x-half_width, y+half_height, z+half_depth);
+			glVertex3f(x+half_width, y+half_height, z+half_depth);
+
+			glColor3f(1.0f, 1.0f, 1.0f);
+			glVertex3f(x-half_width, y+half_height, z+half_depth);
+			glVertex3f(x-half_width, y-half_height, z+half_depth);
+			glVertex3f(x+half_width, y-half_height, z+half_depth);
+			glVertex3f(x+half_width, y+half_height, z+half_depth);
+
+			glColor3f(0.0f, 1.0f, 1.0f);
+			glVertex3f(x+half_width, y-half_height, z-half_depth);
+			glVertex3f(x-half_width, y-half_height, z-half_depth);
+			glVertex3f(x-half_width, y-half_height, z+half_depth);
+			glVertex3f(x+half_width, y-half_height, z+half_depth);
+
+			glColor3f(0.0f, 0.0f, 1.0f);
+			glVertex3f(x-half_width, y+half_height, z-half_depth);
+			glVertex3f(x-half_width, y-half_height, z-half_depth);
+			glVertex3f(x-half_width, y-half_height, z+half_depth);
+			glVertex3f(x-half_width, y+half_height, z+half_depth);
+
+			glColor3f(1.0f, 0.0f, 1.0f);
+			glVertex3f(x+half_width, y+half_height, z-half_depth);
+			glVertex3f(x+half_width, y-half_height, z-half_depth);
+			glVertex3f(x+half_width, y-half_height, z+half_depth);
+			glVertex3f(x+half_width, y+half_height, z+half_depth);
+>>>>>>> 94709aac079139977d61a7899f4e29fac8894fe6
 
 			glEnd();
 			glDisable( GL_TEXTURE_2D );
@@ -534,7 +594,12 @@ void Block::Update(double dt, const Scene& scene, const vec3& externalForces)
   }
 }
 
+<<<<<<< HEAD
 void Block::CheckForCollisions(BlockGrid& grid, const Scene& scene, BlockList& list)
+=======
+// the scene seems to be unused
+void Block::CheckForCollisions(BlockGrid& grid, const Scene& scene)
+>>>>>>> 94709aac079139977d61a7899f4e29fac8894fe6
 {
    m_vcontacts.clear();
    m_vcollisions.clear();
@@ -575,7 +640,7 @@ void Block::CheckForCollisions(BlockGrid& grid, const Scene& scene, BlockList& l
       }
 
 }
-
+// similarly, shouldn't this be const?
 bool Block::FloorIntersection(Particle& p, Intersection& intersection)
 {
   if(p.position[1]<-1.0f)
@@ -963,6 +1028,11 @@ Block::Particle Block::Particle::EMPTY;
 
 Block::Particle::Particle(int idx, const vec3& p, const vec3& v, double m)
 {
+<<<<<<< HEAD
+=======
+	// normally these should be done in initializers instead of in the body of the constructor
+//	printf("Hello");
+>>>>>>> 94709aac079139977d61a7899f4e29fac8894fe6
     index = idx;
     position = p;
     velocity = v;
