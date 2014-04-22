@@ -22,7 +22,8 @@
 <option id="gnu.cpp.compiler.option.optimization.level.363936790" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 <option id="gnu.cpp.compiler.option.debugging.level.470106420" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 <option id="gnu.cpp.compiler.option.include.paths.1790642867" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-<listOptionValue builtIn="false" value="/usr/include"/>
+<listOptionValue builtIn="false" value="/home/vrwall/Downloads/vrpn/quat"/>
+<listOptionValue builtIn="false" value="/home/vrwall/Downloads/vrpn"/>
 <listOptionValue builtIn="false" value="/usr/local/lib"/>
 <listOptionValue builtIn="false" value="/usr/local/include"/>
 </option>
@@ -31,10 +32,20 @@
 <tool id="cdt.managedbuild.tool.gnu.cross.cpp.linker.228493797" name="Cross G++ Linker" superClass="cdt.managedbuild.tool.gnu.cross.cpp.linker">
 <option id="gnu.cpp.link.option.libs.1860174354" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 <listOptionValue builtIn="false" value="GL"/>
+<listOptionValue builtIn="false" value="cwiid"/>
+<listOptionValue builtIn="false" value="bluetooth"/>
+<listOptionValue builtIn="false" value="vrpn"/>
+<listOptionValue builtIn="false" value="pthread"/>
+<listOptionValue builtIn="false" value="quat"/>
+<listOptionValue builtIn="false" value="m"/>
 <listOptionValue builtIn="false" value="GLU"/>
 <listOptionValue builtIn="false" value="GLEW"/>
 <listOptionValue builtIn="false" value="glut"/>
 <listOptionValue builtIn="false" value="gltools"/>
+</option>
+<option id="gnu.cpp.link.option.paths.419779864" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
+<listOptionValue builtIn="false" value="/home/vrwall/Downloads/vrpn/pc_linux"/>
+<listOptionValue builtIn="false" value="/home/vrwall/Downloads/vrpn/quat/pc_linux"/>
 </option>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1935509521" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>

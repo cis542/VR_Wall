@@ -166,7 +166,6 @@ vec3::vec3()
 
 vec3::vec3(const double x, const double y, const double z)
 {
-	
 	n[VX] = x; n[VY] = y; n[VZ] = z;
 }
 

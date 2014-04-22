@@ -1,0 +1,1 @@
+g++ -g -I/home/vrwall/Downloads/vrpn -I/home/vrwall/Downloads/vrpn/quat -L/home/vrwall/Downloads/vrpn/pc_linux -L/home/vrwall/Downloads/vrpn/quat/pc_linux -o blocks Block.cpp main.cpp Scene.cpp vec.cpp VRPNClient.cpp inputWii.cpp -I/usr/local/include -I/usr/local/lib -lGL -lGLU -lGLEW -lgltools -lglut -lcwiid -lbluetooth -lvrpn -lpthread -lquat -lm
