@@ -40,7 +40,7 @@ class Block
 
      virtual void Draw(vec3 center);
 
-     friend  void drawCube(double x, double y, double z);
+     void drawCube(double x, double y, double z);
 
      //virtual void DrawCube(double x, double y, double z);
 
@@ -164,6 +164,7 @@ class Block
 
 
      enum IntersectionType{CONTACT, COLLISION};
+     enum CollisionType{GROUND, BLOCKS};
      class Intersection
      {
      public:
@@ -176,6 +177,7 @@ class Block
         vec3 m_normal;
         double m_distance;
         IntersectionType m_type;
+        CollisionType m_collisiontype;
      };
 
      public:

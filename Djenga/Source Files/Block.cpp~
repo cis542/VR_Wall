@@ -2,7 +2,7 @@
  * Block.cpp
  *
  *  Created on: Mar 30, 2014
- *      Author: vrwall
+ *      Author: Jing
  */
 
 #include "../Header Files/Block.h"
@@ -37,10 +37,16 @@
    int heightNumber;
    int depthNumber;
 
-  const double VirtualKs = 1000;
-  const double VirtualKd = 20;
-  const double g_structuralKs=6000;
+  const double GroundKs = 1000;
+  const double GroundKd = 30;
+
+  const double BlocksKs = 100;
+  const double BlocksKd = 10;
+  
+  const double g_structuralKs=4000;
   const double g_structuralKd=10;
+
+  const double frictionConst=0.05;
 
   //void drawCube(double x, double y, double z);
 
@@ -190,7 +196,7 @@ void Block::InitBlock(vec3 center, double width, double height, double depth)
    depthNumber = depth/cellDepth;
    m_center = center;
    double diagonal = sqrt(width*width+depth*depth);
-   m_radius = 0.4*(sqrt(diagonal*diagonal+height*height));
+   m_radius = 0.35*(sqrt(diagonal*diagonal+height*height));
    //m_radius = 0.5*width;
    if (widthNumber > 0 && heightNumber > 0 && depthNumber > 0)
        {
@@ -241,7 +247,7 @@ void Block::InitBlock(vec3 center, double width, double height, double depth)
 
    }
 
-
+   
    for (int i = 0; i < heightNumber+1; i++)
    {
        for (int j = 0; j < widthNumber+1; j++)
@@ -305,22 +311,108 @@ void Block::InitBlock(vec3 center, double width, double height, double depth)
 
 
 	//Setup Bend2 Spring
-		for (int i = 0; i < heightNumber+1; i++)
-   {
-       for (int j = 0; j < widthNumber+1; j++)
-       {
-           for (int k = 0; k < depthNumber+1; k++)
-           {
+	for (int i = 0; i < heightNumber+1; i++)
+   	{
+      	    for (int j = 0; j < widthNumber+1; j++)
+      	    {
+               for (int k = 0; k < depthNumber+1; k++)
+               {
                if (j < widthNumber-2) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i,j+3,k));
                if (i < heightNumber-2) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i+3,j,k));
                if (k < depthNumber-2) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i,j,k+3));
-           }
+               }
        }
    }
 
 
 
+   	
+	for (int i = 0; i < heightNumber+1; i++)
+        {
+       		for (int j = 0; j < widthNumber+1; j++)
+       		{
+       		    for (int k = 0; k < depthNumber+1; k++)
+       		    {
 
+                                if (j < widthNumber-1 && i<heightNumber-1) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i+2,j+2,k));
+			        if(j>1 && i< heightNumber-1) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i+2,j-2,k));
+
+				if(i<heightNumber-1&&k<depthNumber-1) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i+2,j,k+2));
+				if(k>1&& i<heightNumber-1)  AddSpring(GetParticle(g,i,j,k), GetParticle(g,i+2,j,k-2));
+
+				if(j<widthNumber-1&&k<depthNumber-1) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i,j+2,k+2));
+				if(k>1&& j<widthNumber-1)  AddSpring(GetParticle(g,i,j,k), GetParticle(g,i,j+2,k-2));
+
+		    }
+
+		}
+           }
+
+
+	for (int i = 0; i < heightNumber+1; i++)
+        {
+       		for (int j = 0; j < widthNumber+1; j++)
+       		{
+       		    for (int k = 0; k < depthNumber+1; k++)
+       		    {
+
+                                if (j < widthNumber-2 && i<heightNumber-2) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i+3,j+3,k));
+			        if(j>2 && i< heightNumber-2) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i+3,j-3,k));
+
+				if(i<heightNumber-2&&k<depthNumber-2) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i+3,j,k+3));
+				if(k>2&& i<heightNumber-2)  AddSpring(GetParticle(g,i,j,k), GetParticle(g,i+3,j,k-3));
+
+				if(j<widthNumber-2&&k<depthNumber-2) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i,j+3,k+3));
+				if(k>2&& j<widthNumber-2)  AddSpring(GetParticle(g,i,j,k), GetParticle(g,i,j+3,k-3));
+
+		    }
+
+		}
+           }
+
+	for (int i = 0; i < heightNumber+1; i++)
+	   {
+	       for (int j = 0; j < widthNumber+1; j++)
+	       {
+		   for (int k = 0; k < depthNumber+1; k++)
+		   {
+		       if (j < widthNumber-3) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i,j+4,k));
+		       if (i < heightNumber-3) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i+4,j,k));
+		       if (k < depthNumber-3) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i,j,k+4));
+		   }
+	       }
+	   }
+        
+
+//aditya's idea: why not add springs on every pair of particles
+
+/*
+std::vector<Particle> ParticleList;
+for (int i = 0; i < heightNumber+1; i++)
+   {
+       for (int j = 0; j < widthNumber+1; j++)
+       {
+           for (int k = 0; k < depthNumber+1; k++)
+           {
+             ParticleList.push_back(GetParticle(g,i,j,k));
+         
+           }
+        }
+}
+
+int it = ParticleList.size();
+for(int i=it-1;i>=0;i--)
+{
+    for(int j=0;j<ParticleList.size()-1;j++)
+    {
+      AddSpring(ParticleList[j],ParticleList[i]);
+
+    }
+    ParticleList.pop_back();
+
+}
+
+*/
 
 }
 
@@ -401,14 +493,14 @@ void Block::drawCube(double x, double y, double z)
 		
 
 		// texture data
-		width = 259;
-		height = 194;
+		width = 543;
+		height = 612;
 
 		// allocate buffer
 		data = (int*)malloc( width * height * 3 );
 
 		// open and read texture data
-		file = fopen( "index.bmp", "rb" );
+		file = fopen( "24bit.bmp", "rb" );
 		fread( data, width * height * 3, 1, file );
 		fclose( file );
 		// build our texture mipmaps
@@ -584,6 +676,7 @@ bool Block::FloorIntersection(Particle& p, Intersection& intersection)
 	  intersection.m_type = CONTACT;
 	  intersection.m_distance = -1-p.position[1];
 	  intersection.m_normal = vec3(0,1,0);
+          intersection.m_collisiontype=GROUND;
 	  return true;
 
   }
@@ -594,6 +687,7 @@ bool Block::FloorIntersection(Particle& p, Intersection& intersection)
 	  intersection.m_type = COLLISION;
 	  intersection.m_distance = -1+Threshold-p.position[1];
 	  intersection.m_normal = vec3(0,1,0);
+          intersection.m_collisiontype=GROUND;
 	  return true;
 
   }
@@ -662,6 +756,7 @@ bool Block::BlockIntersection(Particle& p, Block& block, Intersection& intersect
                   printf("derp!\n");
                   intersection.m_p = p.index;
 		  intersection.m_type = CONTACT;
+                  intersection.m_collisiontype=BLOCKS;
 		  intersection.m_distance = block.GetRadius()-(p.position-block.GetCenter()).Length();      //how to compute?
 		  intersection.m_normal = (p.position-block.GetCenter()).Normalize();
 		  return true;
@@ -670,6 +765,7 @@ bool Block::BlockIntersection(Particle& p, Block& block, Intersection& intersect
      	{
 		  intersection.m_p = p.index;
 		  intersection.m_type = COLLISION;
+                  intersection.m_collisiontype=BLOCKS;
 		  intersection.m_distance = block.GetRadius()+Threshold-(p.position-block.GetCenter()).Length();
 		  intersection.m_normal = (p.position-block.GetCenter()).Normalize();
 		  return true;
@@ -749,16 +845,94 @@ void Block::ResolveCollisions(BlockGrid& grid)
 	  Particle& pt = GetParticle(grid, result.m_p);
 	  vec3 normal = result.m_normal;
 	  double dist = result.m_distance;
-
+          vec3 centerV= GetParticle(grid, (int)(heightNumber/2), (int)(widthNumber/2), (int)(depthNumber/2)).velocity;
+          
 	  if(pt.velocity*normal<0)
 	  {
-		  pt.force += VirtualKs*(dist*normal)+VirtualKd*(pt.velocity*normal)*normal;
+                  if(result.m_collisiontype==GROUND)
+                  {
+		  pt.force += GroundKs*(dist*normal)+GroundKd*(pt.velocity*normal)*normal;
+                  vec3 fri=-vec3(pt.velocity[0],0,pt.velocity[2]).Normalize();
+                  /*
+		  for(int i=0;i<heightNumber+1;i++)
+	      	  {
+	              for(int j=0; j<widthNumber+1;j++)
+	              {
+	                  for(int k=0; k<depthNumber+1;k++)
+	                  {
+                              GetParticle(grid,i,j,k).force+=fri*frictionConst;
+                           }
+                      }
+                   }
+                  */
+                  if(pt.velocity[0]<0.001&&pt.velocity[2]<0.001)
+                  {
+                  pt.force=vec3(0,pt.force[1],0);
+                  
 
+                  /*
+                  for(int i=0;i<heightNumber+1;i++)
+	      	  {
+	              for(int j=0; j<widthNumber+1;j++)
+	              {
+	                  for(int k=0; k<depthNumber+1;k++)
+	                  {
+                              GetParticle(grid,i,j,k).force=vec3(0,GetParticle(grid,i,j,k).force[1],0);
+                           }
+                      }
+                   }
+                  */
+                  }
+                  else pt.force+=fri*frictionConst;
+                  
+                  }
+                  else pt.force += BlocksKs*(dist*normal)+BlocksKd*(pt.velocity*normal)*normal;
 	  }
 
-	  }
+	  
+          else
+          {
+
+              if(result.m_collisiontype==GROUND)
+              {
+		  //pt.force += GroundKs*(dist*normal)+GroundKd*(pt.velocity*normal)*normal;
+                  vec3 fri=-vec3(pt.velocity[0],0,pt.velocity[2]).Normalize();
+                  /*
+		  for(int i=0;i<heightNumber+1;i++)
+	      	  {
+	              for(int j=0; j<widthNumber+1;j++)
+	              {
+	                  for(int k=0; k<depthNumber+1;k++)
+	                  {
+                              GetParticle(grid,i,j,k).force+=fri*frictionConst;
+                           }
+                      }
+                   }
+                  */
+                  if(pt.velocity[0]<0.001&&pt.velocity[2]<0.001)
+                  {
+                  pt.force=vec3(0,pt.force[1],0);
+                  
+
+                  /*
+                  for(int i=0;i<heightNumber+1;i++)
+	      	  {
+	              for(int j=0; j<widthNumber+1;j++)
+	              {
+	                  for(int k=0; k<depthNumber+1;k++)
+	                  {
+                              GetParticle(grid,i,j,k).force=vec3(0,GetParticle(grid,i,j,k).force[1],0);
+                           }
+                      }
+                   }
+                  */
+                  }
+                  else pt.force+=fri*frictionConst;
+
+               }
+          }
+      }
 }
-
 
 void Block::EulerIntegrate(double dt)
 {

@@ -2,7 +2,7 @@
  * main.cpp
  *
  *  Created on: Mar 30, 2014
- *      Author: vrwall
+ *      Author: Jing, Aditya
  */
 
 #include <stdio.h>
@@ -24,7 +24,7 @@
 #include "../Header Files/inputWii.h"
 //#include "WinUser.h"
 
-#define NUM_BLOCKS 3
+#define NUM_BLOCKS 2
 #define PI 3.1459
 VRPNClient VClient;
 //InputWii Wii("00:17:AB:39:4E:C5");
@@ -231,7 +231,7 @@ void initBlocks()
 {
 	initialPos[0] = vec3(0.0, 0.0 , 0.0);
 	initialPos[1] = vec3(0.4, 1.0 , 0.0);
-	initialPos[2] = vec3(-0.4, 1.0 , 0.0);
+	//initialPos[2] = vec3(-0.4, 1.0 , 0.0);
 	//initialPos[3] = vec3(0, 0.25 , 0);
 	//initialPos[4] = vec3(0.5, 0 , 0);
 	//initialPos[5] = vec3(0.5, 1 , 0);

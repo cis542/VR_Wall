@@ -2,7 +2,7 @@
  * Block.cpp
  *
  *  Created on: Mar 30, 2014
- *      Author: vrwall
+ *      Author: Jing
  */
 
 #include "../Header Files/Block.h"
@@ -21,20 +21,11 @@
 
 #define PI 3.1459
 
-<<<<<<< HEAD
  const double cellWidth = 0.1;
  const double cellHeight = 0.1;
  const double cellDepth = 0.1;
 
  const float Threshold = 0.1;
-=======
-// these should be documented and static members of a class (e.g., in Block)
- const double cellWidth = 1.0;
- const double cellHeight = 1.0;
- const double cellDepth = 1.0;
-
- const float Threshold = 0.15;
->>>>>>> 94709aac079139977d61a7899f4e29fac8894fe6
 
  double globalWidth;
  double globalHeight;
@@ -46,32 +37,27 @@
    int heightNumber;
    int depthNumber;
 
-<<<<<<< HEAD
-  const double VirtualKs = 1000;
-  const double VirtualKd = 20;
-  const double g_structuralKs=6000;
+  const double GroundKs = 1000;
+  const double GroundKd = 30;
+
+  const double BlocksKs = 100;
+  const double BlocksKd = 10;
+  
+  const double g_structuralKs=4000;
   const double g_structuralKd=10;
+
+  const double frictionConst=0.05;
 
   //void drawCube(double x, double y, double z);
 
   void SetGridSize(int cols, int rows, int stacks);
-=======
-  const double VirtualKs = 4000;
-  const double VirtualKd = 10;
-  void drawCube(double x, double y, double z);
->>>>>>> 94709aac079139977d61a7899f4e29fac8894fe6
 
   vec3 globalCenter = vec3();
 
 
  Block::Block():
-<<<<<<< HEAD
  m_integrationType(Block::RK4),m_width(0.0),m_height(0.0),m_depth(0.0),m_radius(0.0),m_index(-1)
  {
-=======
- m_integrationType(Block::RK4),m_width(0.0),m_height(0.0),m_depth(0.0)
- {// why the following?
->>>>>>> 94709aac079139977d61a7899f4e29fac8894fe6
    ;
 
  }
@@ -210,7 +196,7 @@ void Block::InitBlock(vec3 center, double width, double height, double depth)
    depthNumber = depth/cellDepth;
    m_center = center;
    double diagonal = sqrt(width*width+depth*depth);
-   m_radius = 0.4*(sqrt(diagonal*diagonal+height*height));
+   m_radius = 0.35*(sqrt(diagonal*diagonal+height*height));
    //m_radius = 0.5*width;
    if (widthNumber > 0 && heightNumber > 0 && depthNumber > 0)
        {
@@ -261,7 +247,7 @@ void Block::InitBlock(vec3 center, double width, double height, double depth)
 
    }
 
-
+   
    for (int i = 0; i < heightNumber+1; i++)
    {
        for (int j = 0; j < widthNumber+1; j++)
@@ -325,22 +311,108 @@ void Block::InitBlock(vec3 center, double width, double height, double depth)
 
 
 	//Setup Bend2 Spring
-		for (int i = 0; i < heightNumber+1; i++)
-   {
-       for (int j = 0; j < widthNumber+1; j++)
-       {
-           for (int k = 0; k < depthNumber+1; k++)
-           {
+	for (int i = 0; i < heightNumber+1; i++)
+   	{
+      	    for (int j = 0; j < widthNumber+1; j++)
+      	    {
+               for (int k = 0; k < depthNumber+1; k++)
+               {
                if (j < widthNumber-2) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i,j+3,k));
                if (i < heightNumber-2) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i+3,j,k));
                if (k < depthNumber-2) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i,j,k+3));
-           }
+               }
        }
    }
 
 
 
+   	
+	for (int i = 0; i < heightNumber+1; i++)
+        {
+       		for (int j = 0; j < widthNumber+1; j++)
+       		{
+       		    for (int k = 0; k < depthNumber+1; k++)
+       		    {
 
+                                if (j < widthNumber-1 && i<heightNumber-1) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i+2,j+2,k));
+			        if(j>1 && i< heightNumber-1) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i+2,j-2,k));
+
+				if(i<heightNumber-1&&k<depthNumber-1) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i+2,j,k+2));
+				if(k>1&& i<heightNumber-1)  AddSpring(GetParticle(g,i,j,k), GetParticle(g,i+2,j,k-2));
+
+				if(j<widthNumber-1&&k<depthNumber-1) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i,j+2,k+2));
+				if(k>1&& j<widthNumber-1)  AddSpring(GetParticle(g,i,j,k), GetParticle(g,i,j+2,k-2));
+
+		    }
+
+		}
+           }
+
+
+	for (int i = 0; i < heightNumber+1; i++)
+        {
+       		for (int j = 0; j < widthNumber+1; j++)
+       		{
+       		    for (int k = 0; k < depthNumber+1; k++)
+       		    {
+
+                                if (j < widthNumber-2 && i<heightNumber-2) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i+3,j+3,k));
+			        if(j>2 && i< heightNumber-2) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i+3,j-3,k));
+
+				if(i<heightNumber-2&&k<depthNumber-2) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i+3,j,k+3));
+				if(k>2&& i<heightNumber-2)  AddSpring(GetParticle(g,i,j,k), GetParticle(g,i+3,j,k-3));
+
+				if(j<widthNumber-2&&k<depthNumber-2) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i,j+3,k+3));
+				if(k>2&& j<widthNumber-2)  AddSpring(GetParticle(g,i,j,k), GetParticle(g,i,j+3,k-3));
+
+		    }
+
+		}
+           }
+
+	for (int i = 0; i < heightNumber+1; i++)
+	   {
+	       for (int j = 0; j < widthNumber+1; j++)
+	       {
+		   for (int k = 0; k < depthNumber+1; k++)
+		   {
+		       if (j < widthNumber-3) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i,j+4,k));
+		       if (i < heightNumber-3) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i+4,j,k));
+		       if (k < depthNumber-3) AddSpring(GetParticle(g,i,j,k), GetParticle(g,i,j,k+4));
+		   }
+	       }
+	   }
+        
+
+//aditya's idea: why not add springs on every pair of particles
+
+/*
+std::vector<Particle> ParticleList;
+for (int i = 0; i < heightNumber+1; i++)
+   {
+       for (int j = 0; j < widthNumber+1; j++)
+       {
+           for (int k = 0; k < depthNumber+1; k++)
+           {
+             ParticleList.push_back(GetParticle(g,i,j,k));
+         
+           }
+        }
+}
+
+int it = ParticleList.size();
+for(int i=it-1;i>=0;i--)
+{
+    for(int j=0;j<ParticleList.size()-1;j++)
+    {
+      AddSpring(ParticleList[j],ParticleList[i]);
+
+    }
+    ParticleList.pop_back();
+
+}
+
+*/
 
 }
 
@@ -421,14 +493,14 @@ void Block::drawCube(double x, double y, double z)
 		
 
 		// texture data
-		width = 259;
-		height = 194;
+		width = 543;
+		height = 612;
 
 		// allocate buffer
 		data = (int*)malloc( width * height * 3 );
 
 		// open and read texture data
-		file = fopen( "index.bmp", "rb" );
+		file = fopen( "24bit.bmp", "rb" );
 		fread( data, width * height * 3, 1, file );
 		fclose( file );
 		// build our texture mipmaps
@@ -441,7 +513,6 @@ void Block::drawCube(double x, double y, double z)
                  
                 /*
 		glBegin(GL_QUADS);
-<<<<<<< HEAD
 			//glColor3f(1.0f, 1.0f, 0.0f);
 			glTexCoord2d(0,0);glVertex3f(x-half_width, y-half_height, z-half_depth);
 			glTexCoord2d(0,1);glVertex3f(x+half_width, y-half_height, z-half_depth);
@@ -478,45 +549,6 @@ void Block::drawCube(double x, double y, double z)
 			glTexCoord2d(0,1);glVertex3f(x+half_width, y-half_height, z-half_depth);
 			glTexCoord2d(1,1);glVertex3f(x+half_width, y-half_height, z+half_depth);
 			glTexCoord2d(1,0);glVertex3f(x+half_width, y+half_height, z+half_depth);
-=======
-		// can this code made less repetetive?
-			glColor3f(1.0f, 1.0f, 0.0f);
-			glVertex3f(x-half_width, y-half_height, z-half_depth);
-			glVertex3f(x+half_width, y-half_height, z-half_depth);
-			glVertex3f(x+half_width, y+half_height, z-half_depth);
-			glVertex3f(x-half_width, y+half_height, z-half_depth);
-
-
-			glColor3f(1.0f, 1.0f, 0.0f);
-			glVertex3f(x+half_width, y+half_height, z-half_depth);
-			glVertex3f(x-half_width, y+half_height, z-half_depth);
-			glVertex3f(x-half_width, y+half_height, z+half_depth);
-			glVertex3f(x+half_width, y+half_height, z+half_depth);
-
-			glColor3f(1.0f, 1.0f, 1.0f);
-			glVertex3f(x-half_width, y+half_height, z+half_depth);
-			glVertex3f(x-half_width, y-half_height, z+half_depth);
-			glVertex3f(x+half_width, y-half_height, z+half_depth);
-			glVertex3f(x+half_width, y+half_height, z+half_depth);
-
-			glColor3f(0.0f, 1.0f, 1.0f);
-			glVertex3f(x+half_width, y-half_height, z-half_depth);
-			glVertex3f(x-half_width, y-half_height, z-half_depth);
-			glVertex3f(x-half_width, y-half_height, z+half_depth);
-			glVertex3f(x+half_width, y-half_height, z+half_depth);
-
-			glColor3f(0.0f, 0.0f, 1.0f);
-			glVertex3f(x-half_width, y+half_height, z-half_depth);
-			glVertex3f(x-half_width, y-half_height, z-half_depth);
-			glVertex3f(x-half_width, y-half_height, z+half_depth);
-			glVertex3f(x-half_width, y+half_height, z+half_depth);
-
-			glColor3f(1.0f, 0.0f, 1.0f);
-			glVertex3f(x+half_width, y+half_height, z-half_depth);
-			glVertex3f(x+half_width, y-half_height, z-half_depth);
-			glVertex3f(x+half_width, y-half_height, z+half_depth);
-			glVertex3f(x+half_width, y+half_height, z+half_depth);
->>>>>>> 94709aac079139977d61a7899f4e29fac8894fe6
 
 			glEnd();
 			glDisable( GL_TEXTURE_2D );
@@ -594,12 +626,7 @@ void Block::Update(double dt, const Scene& scene, const vec3& externalForces)
   }
 }
 
-<<<<<<< HEAD
 void Block::CheckForCollisions(BlockGrid& grid, const Scene& scene, BlockList& list)
-=======
-// the scene seems to be unused
-void Block::CheckForCollisions(BlockGrid& grid, const Scene& scene)
->>>>>>> 94709aac079139977d61a7899f4e29fac8894fe6
 {
    m_vcontacts.clear();
    m_vcollisions.clear();
@@ -640,7 +667,7 @@ void Block::CheckForCollisions(BlockGrid& grid, const Scene& scene)
       }
 
 }
-// similarly, shouldn't this be const?
+
 bool Block::FloorIntersection(Particle& p, Intersection& intersection)
 {
   if(p.position[1]<-1.0f)
@@ -649,6 +676,7 @@ bool Block::FloorIntersection(Particle& p, Intersection& intersection)
 	  intersection.m_type = CONTACT;
 	  intersection.m_distance = -1-p.position[1];
 	  intersection.m_normal = vec3(0,1,0);
+          intersection.m_collisiontype=GROUND;
 	  return true;
 
   }
@@ -659,6 +687,7 @@ bool Block::FloorIntersection(Particle& p, Intersection& intersection)
 	  intersection.m_type = COLLISION;
 	  intersection.m_distance = -1+Threshold-p.position[1];
 	  intersection.m_normal = vec3(0,1,0);
+          intersection.m_collisiontype=GROUND;
 	  return true;
 
   }
@@ -727,6 +756,7 @@ bool Block::BlockIntersection(Particle& p, Block& block, Intersection& intersect
                   printf("derp!\n");
                   intersection.m_p = p.index;
 		  intersection.m_type = CONTACT;
+                  intersection.m_collisiontype=BLOCKS;
 		  intersection.m_distance = block.GetRadius()-(p.position-block.GetCenter()).Length();      //how to compute?
 		  intersection.m_normal = (p.position-block.GetCenter()).Normalize();
 		  return true;
@@ -735,6 +765,7 @@ bool Block::BlockIntersection(Particle& p, Block& block, Intersection& intersect
      	{
 		  intersection.m_p = p.index;
 		  intersection.m_type = COLLISION;
+                  intersection.m_collisiontype=BLOCKS;
 		  intersection.m_distance = block.GetRadius()+Threshold-(p.position-block.GetCenter()).Length();
 		  intersection.m_normal = (p.position-block.GetCenter()).Normalize();
 		  return true;
@@ -814,16 +845,94 @@ void Block::ResolveCollisions(BlockGrid& grid)
 	  Particle& pt = GetParticle(grid, result.m_p);
 	  vec3 normal = result.m_normal;
 	  double dist = result.m_distance;
-
+          vec3 centerV= GetParticle(grid, (int)(heightNumber/2), (int)(widthNumber/2), (int)(depthNumber/2)).velocity;
+          
 	  if(pt.velocity*normal<0)
 	  {
-		  pt.force += VirtualKs*(dist*normal)+VirtualKd*(pt.velocity*normal)*normal;
+                  if(result.m_collisiontype==GROUND)
+                  {
+		  pt.force += GroundKs*(dist*normal)+GroundKd*(pt.velocity*normal)*normal;
+                  vec3 fri=-vec3(pt.velocity[0],0,pt.velocity[2]);
+                  /*
+		  for(int i=0;i<heightNumber+1;i++)
+	      	  {
+	              for(int j=0; j<widthNumber+1;j++)
+	              {
+	                  for(int k=0; k<depthNumber+1;k++)
+	                  {
+                              GetParticle(grid,i,j,k).force+=fri*frictionConst;
+                           }
+                      }
+                   }
+                  */
+                  if(pt.velocity[0]<0.001&&pt.velocity[2]<0.001)
+                  {
+                  pt.force=vec3(0,pt.force[1],0);
+                  
 
+                  /*
+                  for(int i=0;i<heightNumber+1;i++)
+	      	  {
+	              for(int j=0; j<widthNumber+1;j++)
+	              {
+	                  for(int k=0; k<depthNumber+1;k++)
+	                  {
+                              GetParticle(grid,i,j,k).force=vec3(0,GetParticle(grid,i,j,k).force[1],0);
+                           }
+                      }
+                   }
+                  */
+                  }
+                  else pt.force+=fri*frictionConst;
+                  
+                  }
+                  else pt.force += BlocksKs*(dist*normal)+BlocksKd*(pt.velocity*normal)*normal;
 	  }
 
-	  }
+	  
+          else
+          {
+
+              if(result.m_collisiontype==GROUND)
+              {
+		  //pt.force += GroundKs*(dist*normal)+GroundKd*(pt.velocity*normal)*normal;
+                  vec3 fri=-vec3(pt.velocity[0],0,pt.velocity[2]);
+                  /*
+		  for(int i=0;i<heightNumber+1;i++)
+	      	  {
+	              for(int j=0; j<widthNumber+1;j++)
+	              {
+	                  for(int k=0; k<depthNumber+1;k++)
+	                  {
+                              GetParticle(grid,i,j,k).force+=fri*frictionConst;
+                           }
+                      }
+                   }
+                  */
+                  if(pt.velocity[0]<0.001&&pt.velocity[2]<0.001)
+                  {
+                  pt.force=vec3(0,pt.force[1],0);
+                  
+
+                  /*
+                  for(int i=0;i<heightNumber+1;i++)
+	      	  {
+	              for(int j=0; j<widthNumber+1;j++)
+	              {
+	                  for(int k=0; k<depthNumber+1;k++)
+	                  {
+                              GetParticle(grid,i,j,k).force=vec3(0,GetParticle(grid,i,j,k).force[1],0);
+                           }
+                      }
+                   }
+                  */
+                  }
+                  else pt.force+=fri*frictionConst;
+
+               }
+          }
+      }
 }
-
 
 void Block::EulerIntegrate(double dt)
 {
@@ -1028,11 +1137,6 @@ Block::Particle Block::Particle::EMPTY;
 
 Block::Particle::Particle(int idx, const vec3& p, const vec3& v, double m)
 {
-<<<<<<< HEAD
-=======
-	// normally these should be done in initializers instead of in the body of the constructor
-//	printf("Hello");
->>>>>>> 94709aac079139977d61a7899f4e29fac8894fe6
     index = idx;
     position = p;
     velocity = v;
