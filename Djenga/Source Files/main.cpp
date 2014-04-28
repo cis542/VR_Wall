@@ -229,8 +229,8 @@ glEnable(GL_FOG);
 
 void initBlocks()
 {
-	initialPos[0] = vec3(0.0, 0.0 , 0.0);
-	initialPos[1] = vec3(0.4, 1.0 , 0.0);
+	initialPos[0] = vec3(0.2, 0.0 , 0.0);
+	initialPos[1] = vec3(0.5, 1.0 , 0.0);
 	//initialPos[2] = vec3(-0.4, 1.0 , 0.0);
 	//initialPos[3] = vec3(0, 0.25 , 0);
 	//initialPos[4] = vec3(0.5, 0 , 0);

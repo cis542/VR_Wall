@@ -1,20 +1,17 @@
 /*
- * Block.h
+ *  Block.h
  *
  *  Created on: Mar 30, 2014
- *      Author: Jing
+ *  Author: Jing
  */
 
 #ifndef BLOCK_H_
 #define BLOCK_H_
 
-
-
 #include <GL/gl.h>
 #include <GL/gl.h>
 #include <GL/glut.h>
 #include <GL/glu.h>
-
 #include <math.h>
 #include <vector>
 #include <map>
@@ -24,41 +21,18 @@
 class Block
 {
   public:
-     Block();
-     //Block(const Block& block);
-
-    // Block& operator=(const Block& block);
-
-     virtual ~Block();
-
+     Block();               		//Block constructor
+     virtual ~Block();      		//virtual Destructor
      virtual void Update(double dt,
                         const Scene& scene,
                         const vec3& externalForces = vec3(0.0,-9.8,0.0)
                         );
 
-
-
      virtual void Draw(vec3 center);
-
-     void drawCube(double x, double y, double z);
-
-     //virtual void DrawCube(double x, double y, double z);
-
      virtual void Reset();
-
-     //virtual void SetGridSize(int cols, int rows, int stacks);
-
      enum IntegrationType {EULER, MIDPOINT, RK4};
      virtual void SetIntegrationType(IntegrationType type);
      virtual IntegrationType GetIntegrationType() const;
-
-     virtual int onMouseCheck(vec3 point);
-
-
-
-     virtual void clearUserForces();
-
-
 
      virtual void InitBlock(vec3 position, double width, double height, double depth);
 
@@ -68,20 +42,17 @@ class Block
 
      vec3 m_center;
 
-     vec3 m_externalForces;
-
-     vec3 m_initialPosition;
+     vec3 m_externalForces;   //the external Forces will be Gravity in this case, it will be applied to every block    
 
      int m_index;
 
-     
-     
+     bool m_friction;    //friction flag
 
-     
+     bool m_alreadyfriction;
 
      vec3 pointerPosition;
      vec3 prev_pointerPosition;
-     int held_flag; // to chk if the block is held
+     int held_flag; // to check if the block is held
 
      int GetIndex(int i, int j, int k) const;
 
@@ -107,6 +78,7 @@ class Block
 
      typedef std::vector<std::vector<std::vector<Particle> > > BlockGrid;
      typedef std::vector<Block*> BlockList;
+     
      
 
      Particle& GetParticle(BlockGrid& grid, int index);
@@ -200,6 +172,7 @@ class Block
      virtual void AddSpring(Particle& p1, Particle& p2);
      virtual void dragBlock(BlockGrid& grid);
      virtual void Rotate(double deg);
+     virtual void ResolveFriction(BlockGrid& grid);
      
 
      virtual vec3 GetCenter() const;
@@ -213,6 +186,9 @@ class Block
 
      virtual int GetBlockIndex() const;
      virtual void SetBlockIndex(int i);
+
+     virtual bool GetFrictionFlag() const;
+     virtual void SetFrictionFlag(bool flag); 
 
 
 

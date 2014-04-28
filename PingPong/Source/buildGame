@@ -1,0 +1,1 @@
+g++  -o pingpong -std=c++0x Tools.cpp Vector.cpp Corridor.cpp Main.cpp  -I/usr/local/include -I/usr/local/lib -lGL -lGLU -lGLEW -lgltools -lglut -lm -lpthread
