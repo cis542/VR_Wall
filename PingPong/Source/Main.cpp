@@ -14,12 +14,13 @@
 #include <iostream>
 #include "../Headers/Tools.h"
 
-
+// put everything here in a class
 
 void drawSphere(const Sphere& s);
 Vector isCollidingWithPad(const Sphere&s, const Pad& p);
 Vector isColliding(const Sphere&s, const Corridor& cor);
 
+// wht does this represent? Where are its methods?
 typedef struct {
     int width;
 	int height;
@@ -39,6 +40,7 @@ Corridor cor;
 Pad pad;
 
 void init(){
+	// this should be in a constructor
 	GLfloat sun_direction[] = {0.0, 2.0, -1.0, 1.0};
 	GLfloat sun_intensity[] = {0.7, 0.7, 0.7, 1.0};
 	GLfloat ambient_intensity[] = {0.3, 0.3, 0.3, 1.0};

@@ -19,7 +19,9 @@ class Sphere{
 	double radius;
 	Vector velocity;
 	Vector position;
-	
+	// if you are going to update the position of a body with a change of time,
+	// you might want to make this safer by maintaining a "local time" (in real or ghost data)
+	// to make sure that you remember to update everything. this field could be used only for debug builds.
 	public:
 
 	Sphere(double r, Vector v, Vector p);
@@ -34,7 +36,7 @@ class Sphere{
 };
 
  
-	
+	// documentation?
 class Pad{
 	Vector position;
 	double radius;

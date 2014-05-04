@@ -12,6 +12,7 @@
 #include <math.h>
 #include <iostream>
 
+// documentation?
 class Corridor{
 	
 	double rightWall;
