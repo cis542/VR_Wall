@@ -1,0 +1,17 @@
+﻿Build started 30-Apr-14 23:23:38.
+     1>Project "C:\Users\Aniruddha\Desktop\Game\Game\framework\framework.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Touching "lib\Debug\framework.unsuccessfulbuild".
+       ClCompile:
+         All outputs are up-to-date.
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"lib\frameworkD.lib" /NOLOGO lib\Debug\framework.obj
+         framework.vcxproj -> C:\Users\Aniruddha\Desktop\Game\Game\framework\lib\frameworkD.lib
+       FinalizeBuildStatus:
+         Deleting file "lib\Debug\framework.unsuccessfulbuild".
+         Touching "lib\Debug\framework.lastbuildstate".
+     1>Done Building Project "C:\Users\Aniruddha\Desktop\Game\Game\framework\framework.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.40
