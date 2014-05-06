@@ -1,8 +1,8 @@
 /*
+* 
+* Project: VR Wall 
+* Author: Aditya
 * inputWii.h
-*
-* Author: VR wall
-*
 *
 */
 
@@ -16,7 +16,9 @@ class InputWii{
 	struct cwiid_state wiiState;
 
 	public:
-		InputWii(const char * BluetoothID);
-		virtual int GetButtonId(void);
+		InputWii();
+		~InputWii();
+                void connectTo(const string& bluetoothID);
+		int GetButtonId(void);
 };
 	

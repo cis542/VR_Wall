@@ -18,17 +18,35 @@
 #include "vec.h"
 #include "Scene.h"
 
+extern const double cellWidth;
+extern const double cellHeight;
+extern const double cellDepth;
+extern const float Threshold;
+
+extern const double GroundKs;
+extern const double GroundKd;
+
+extern const double BlocksKs;
+extern const double BlocksKd;
+  
+extern const double g_structuralKs;
+extern const double g_structuralKd;
+
+extern const double frictionConst;
+
 class Block
 {
   public:
      Block();               		//Block constructor
-     virtual ~Block();      		//virtual Destructor
+     virtual ~Block();      		//Block Destructor
      virtual void Update(double dt,
                         const Scene& scene,
                         const vec3& externalForces = vec3(0.0,-9.8,0.0)
                         );
+     
 
-     virtual void Draw(vec3 center);
+     friend class Game;
+     //friend void Draw(vec3 center);
      virtual void Reset();
      enum IntegrationType {EULER, MIDPOINT, RK4};
      virtual void SetIntegrationType(IntegrationType type);
@@ -39,6 +57,7 @@ class Block
      virtual bool IsInside(double x, double y, double z);
 
      double m_width, m_height, m_depth, m_radius;
+     int widthNumber, heightNumber, depthNumber;
 
      vec3 m_center;
 
@@ -61,14 +80,7 @@ class Block
      virtual double GetWidth() const;
      virtual double GetHeight() const;
      virtual double GetDepth() const;
-     
 
-
-
-
-
-
-     //virtual glm::vec3 onClick();
 
   protected:
 
@@ -79,25 +91,14 @@ class Block
      typedef std::vector<std::vector<std::vector<Particle> > > BlockGrid;
      typedef std::vector<Block*> BlockList;
      
-     BlockGrid m_vparticles;
-
      Particle& GetParticle(BlockGrid& grid, int index);
      Particle& GetParticle(BlockGrid& grid,int i, int j, int k);
-     //const Particle& GetParticle(const BlockGrid& grid, int index) const;
-     //const Particle& GetParticle(const BlockGrid& grid,int i, int j, int k) const;
 
-     //virtual void CheckForCollisions(BlockGrid& grid, const Scene& scene);
      virtual void ResolveCollisions(BlockGrid& grid);
      virtual void ResolveContacts(BlockGrid& grid);
      virtual bool FloorIntersection(Particle& p, Intersection& intersection);
      virtual bool BlockIntersection(Particle& p, Block& block, Intersection& intersection);
-
-     virtual void ResolveDragging(BlockGrid& grid);
-
      virtual void ComputeForces(BlockGrid& grid);
-
-
-
 
      class Particle
      {
@@ -111,7 +112,6 @@ class Block
         vec3 position;
         vec3 velocity;
         vec3 force;
-        vec3 userforce;
         double mass;
 
         static Particle EMPTY;
@@ -125,8 +125,6 @@ class Block
          Spring& operator=(const Spring& p);
          Spring(int p1, int p2,
              double Ks, double Kd, double restLen);
-
-         //SpringType m_type;
          int m_p1;
          int m_p2;
          double m_Ks;
@@ -153,11 +151,8 @@ class Block
      };
 
      public:
-     
+     BlockGrid m_vparticles;
      static BlockList m_vblocks;
-     
-     //int m_cols, m_rows, m_stacks;
-
      IntegrationType m_integrationType;
      std::vector<Intersection>m_vcontacts;
      std::vector<Intersection>m_vcollisions;
@@ -173,8 +168,6 @@ class Block
      virtual void dragBlock(BlockGrid& grid);
      virtual void Rotate(double deg);
      virtual void ResolveFriction(BlockGrid& grid);
-     
-
      virtual vec3 GetCenter() const;
 
      virtual BlockList GetBlockList() const;

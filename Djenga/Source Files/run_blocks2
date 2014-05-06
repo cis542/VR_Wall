@@ -1,0 +1,1 @@
+g++ -g  -o blocks Block.cpp main.cpp Scene.cpp vec.cpp Game.cpp -I/usr/local/include -I/usr/local/lib -lGL -lGLU -lGLEW -lgltools -lglut 
