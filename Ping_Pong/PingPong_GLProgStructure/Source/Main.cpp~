@@ -108,7 +108,7 @@ void init(){
 
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowSize(win.getWidth(),win.getHeight());
-	glutInitWindowPosition(300, 300);
+	glutInitWindowPosition(100, 100);
 	glutCreateWindow((win.getTitle()).c_str());
 	glutDisplayFunc(Draw);
 	//glutSpecialFunc(keyboard);	                         //NOTE: COMMENT THIS LINE WHEN USING THE VIRTUAL WALL SETUP

@@ -34,7 +34,7 @@ class Game{
 
 	GlutWindow win;        
         VRPNClient VClient;
-        
+        InputWii Wii;
         Sphere ball;
 	Pad pad;
 	Corridor cor;

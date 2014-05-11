@@ -177,7 +177,6 @@ Vector Game::isCollidingWithPad(const Sphere&s, const Pad& p){
 	barrier = pow(barrier,0.5);
 	if (spherePosition[2] < padPosition[2]){
 		if (xydist <= p.getRadius()){
-			// Perpendicular collision
 			if (padPosition[2] - spherePosition[2] < s.getRadius() && retVal[2] > 0){
 				temp = Vector(0,0,-1);
 				retVal.reflectAbout(temp);
@@ -185,7 +184,6 @@ Vector Game::isCollidingWithPad(const Sphere&s, const Pad& p){
 		}
 		else if ( total_dist <= barrier ){
 			if (padPosition[2] - spherePosition[2] < s.getRadius()){
-				// Obtuse collision
 				float x_diff = spherePosition[0] - padPosition[0];
 				float y_diff = spherePosition[1] - padPosition[1];
 				float z_diff = spherePosition[2] - padPosition[2];

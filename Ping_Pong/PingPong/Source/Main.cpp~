@@ -19,7 +19,7 @@ int main(int argc, char **argv)
    
    const std::string wandAddr = "Wand@158.130.62.126:3883";
    Game PingPong;
-   PingPong.connectToInputs(wandAddr);	   
+   PingPong.connectToInputs(bluetoothAddr, wandAddr);	   
    PingPong.startGame();	    
    return 0;
 
