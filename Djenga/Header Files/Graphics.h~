@@ -1,0 +1,25 @@
+/*
+*
+*
+*
+*/
+
+#include <stdio.h>
+#include <math.h>
+#include <fstream>
+#include <GL/glut.h>
+#include <iostream>
+#include <stdarg.h>
+#include <stdlib.h>
+
+
+#include "../Header Files/Block.h"
+#include "../Header Files/Scene.h"
+
+class Graphics{
+	void initBlocks();
+	void init(void);
+	void onDrawCb();
+	void onTimerCb(int value);
+	void startGL();
+};

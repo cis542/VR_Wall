@@ -9,20 +9,14 @@
 #include <map>
 #include <GL/glut.h>
 
-Scene::Scene()
-{
-;
-}
+Scene::Scene() {}
 
-Scene::~Scene()
-{
-//TODO
-}
+Scene::~Scene() {}
 
-void Scene::Draw(int width, int depth)
+void Scene::Draw(int width, int depth)   //Draw the ground
 {
 	double half_width = 0.5f*width;
-	double half_height = 0.00001f;
+	double half_height = 0.00001;
 	double half_depth = 0.5f*depth;
 
 	double x=0,y=-1,z=0;

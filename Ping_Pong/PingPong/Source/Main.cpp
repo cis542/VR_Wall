@@ -1,0 +1,26 @@
+/*
+*
+* Project: VR Wall
+* Game: Ping Pong
+* Author: Aditya
+* Main.cpp
+*
+*
+*/
+
+
+#include "../Headers/Game.h"
+#include <string>
+
+
+int main(int argc, char **argv)
+{
+   glutInit(&argc,argv);
+   
+   const std::string wandAddr = "Wand@158.130.62.126:3883";
+   Game PingPong;
+   PingPong.connectToInputs(wandAddr);	   
+   PingPong.startGame();	    
+   return 0;
+
+}

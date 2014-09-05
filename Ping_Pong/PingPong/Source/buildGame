@@ -1,0 +1,1 @@
+g++ -g -I/home/vrwall/Downloads/vrpn -I/home/vrwall/Downloads/vrpn/quat -L/home/vrwall/Downloads/vrpn/pc_linux -L/home/vrwall/Downloads/vrpn/quat/pc_linux -o pingpong -std=c++0x Sphere.cpp Pad.cpp Vector.cpp Corridor.cpp Main.cpp VRPNClient.cpp Game.cpp -I/usr/local/include -I/usr/local/lib -lGL -lGLU -lGLEW -lgltools -lglut -lm -lpthread -lcwiid -lbluetooth -lvrpn -lquat

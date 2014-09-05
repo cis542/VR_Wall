@@ -1,0 +1,132 @@
+/*
+*
+*
+*
+*
+*/
+
+#include "../Header Files/Graphics.h"
+
+Graphics::Graphics(){
+
+}
+
+void Graphics::initBlocks(){
+	
+	initialPos[0] = vec3(0.2, 0.0 , 0.0);
+	initialPos[1] = vec3(0.5, 1.0 , 0.0);
+	//initialPos[2] = vec3(-0.4, 1.0 , 0.0);
+	//initialPos[3] = vec3(0, 0.25 , 0);
+	//initialPos[4] = vec3(0.5, 0 , 0);
+	//initialPos[5] = vec3(0.5, 1 , 0);
+  	for (int i = 0; i < NUM_BLOCKS; i++){
+      		Blocks[i].InitBlock(initialPos[i], 0.5, 0.5, 0.5);
+      		Blocks[i].SetBlockIndex(i);
+     	 	Block::AddToList(&Blocks[i]);
+      	}
+}
+
+//OpenGL set up
+void Graphics::init(){
+            glMatrixMode(GL_PROJECTION);								// select projection matrix
+	    glViewport(0, 0, windowWidth, windowHeight);							// set the viewport
+	    glMatrixMode(GL_PROJECTION);								// set matrix mode
+	    glLoadIdentity();										// reset projection matrix
+	    GLfloat aspect = (GLfloat) windowWidth / windowHeight;
+
+	    gluPerspective(fieldOfView, aspect, windowZNear, windowZFar);		// set up a perspective projection matrix
+	    glMatrixMode(GL_MODELVIEW);								// specify which matrix is the current matrix
+	    glShadeModel( GL_SMOOTH );
+	    glClearDepth( 1.0f );								// specify the clear value for the depth buffer
+	    glEnable( GL_DEPTH_TEST );
+	    glDepthFunc( GL_LEQUAL );
+	    glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );				// specify implementation-specific hints
+            glClearColor(0.0, 0.0, 0.0, 1.0);
+}
+
+void Graphics::onDrawCb()
+{
+
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+    glTranslatef(0.0f,0.0f,-3.0f);
+    glRotatef(alpha,0,1,0);
+    
+
+        theScene.Draw(win.z_near-win.z_far,2);
+
+        for(int i=0;i<NUM_BLOCKS;i++){
+		Blocks[i].Draw(Blocks[i].updateCenter(Blocks[i].m_vparticles));    //give initial coordinates
+	}
+
+        glColor3f(1.0f,0.0f,0.0f);
+	glPointSize(5.0f);
+	glBegin(GL_POINTS);
+	glVertex3f(x_point,y_point,z_point);
+	
+	glEnd();
+	//glutSwapBuffers();
+
+	glutSwapBuffers();
+
+}
+
+
+void Graphics::onTimerCb(int value){
+ 
+   VClient.readData();
+   float x_pos = 2*VClient.getXData();
+   float y_pos = 2*(VClient.getYData()*sin(0.263) - VClient.getZData()*cos(0.263));
+   float z_pos = 2*(VClient.getZData()*sin(0.263) + VClient.getYData()*cos(0.263));
+   int theButtonState = 0;//Wii.GetButtonId();
+  
+   if (theButtonState == 8){
+      for (int i=0; i< 2;i++){
+         if (Blocks[i].IsInside(x_point, y_point, z_point)){
+            Blocks[i].held_flag = 1;
+         }
+         else{
+            Blocks[i].held_flag = 0;
+         }
+      }
+   }
+   else{
+      for (int i=0; i< 2;i++){	
+         Blocks[i].held_flag = 0;	
+      }
+   }
+   if (theButtonState == 512){
+      alpha = alpha + 10;
+   }
+   else if (theButtonState == 256){
+	alpha = alpha - 10;
+   }
+   
+   x_point = x_pos*cos(alpha*PI/180) + z_pos*sin(alpha*PI/180);
+   y_point = y_pos;
+   z_point = z_pos*cos(alpha*PI/180) - x_pos*sin(alpha*PI/180);
+   glutTimerFunc(100,onTimerCb,0);
+
+   for (int i = 0; i < NUM_BLOCKS; i++){		
+      if(isRunning){
+	 Blocks[i].Update(0.01, theScene);
+      }
+   }
+   glutPostRedisplay();
+}
+
+
+void Graphics::startGL(){
+   initBlocks();
+
+   glutInit(&argc, argv);
+   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+   glutInitWindowSize(win.width,win.height);
+   glutInitWindowPosition(100, 100);
+   glutCreateWindow("BlockSim!!");
+   glutDisplayFunc(onDrawCb);
+   glutTimerFunc(100, onTimerCb, 0);
+   init();
+
+   glutMainLoop();
+}
